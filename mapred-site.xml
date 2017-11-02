@@ -1,0 +1,14 @@
+<configuration>
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+    <property>
+	    <name>mapreduce.map.collective.memory.mb</name>
+  <value>512</value>
+</property>
+<property>
+	<name>mapreduce.map.collective.java.opts</name>
+  <value>-Xmx256m -Xms256m</value>
+</property>
+</configuration>
