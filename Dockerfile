@@ -49,10 +49,15 @@ ENV HARP_DAAL_HOME /harp/harp-daal-app
 ENV TBBROOT ${HARP_DAAL_HOME}/daal-src/externals/tbb
 # copy harp-daal-app jar file to Hadoop directory
 RUN cp ${HARP_DAAL_HOME}/target/harp-daal-app-1.0-SNAPSHOT.jar ${HADOOP_HOME}
-# enter hadoop home directory
-RUN cd ${HADOOP_HOME}
 # put daal and tbb, omp libs to hdfs, they will be loaded into the distributed cache of 
 # running harp mappers
 ENV PATH $HADOOP_HOME/bin:$PATH
-ENV LIBJARS ${DAALROOT}/lib/daal.jar
-# launch mappers, e.g., harp-daal-als 
+#ENV LIBJARS ${DAALROOT}/lib/daal.jar
+RUN /etc/bootstrap.sh && \
+	    source /opt/intel/bin/compilervars.sh intel64 && \
+	    hdfs dfsadmin -safemode leave && \
+	    hdfs dfs -mkdir -p /Hadoop/Libraries && \
+	    hdfs dfs -put ${DAALROOT}/lib/intel64_lin/libJavaAPI.so /Hadoop/Libraries/ && \
+	    hdfs dfs -put ${TBBROOT}/lib/intel64/gcc4.4/libtbb* /Hadoop/Libraries/ && \
+	    hdfs dfs -put ${HARP_DAAL_HOME}/external/omp/libiomp5.so /Hadoop/Libraries/
+
