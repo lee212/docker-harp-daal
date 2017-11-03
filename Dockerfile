@@ -65,3 +65,14 @@ RUN wget -q https://repo.continuum.io/archive/Anaconda2-5.0.1-Linux-x86_64.sh -O
 	    bash /conda.sh -b -p /opt/conda && \
 	    rm /conda.sh
 ENV PATH /opt/conda/bin:$PATH
+COPY movielens_nytimes.tar.gz /
+RUN tar xzf /movielens_nytimes.tar.gz -C / && \
+	    rm /movielens_nytimes.tar.gz && \
+	    /etc/bootstrap.sh && \
+	    hdfs dfsadmin -safemode leave && \
+	    hdfs dfs -mkdir -p /movielens/movielens-test && \
+	    hdfs dfs -mkdir -p /movielens/movielens-train && \
+	    hdfs dfs -mkdir -p /nytimes && \
+	    hdfs dfs -put /dataset/nytimes/nytimes.mrlda /nytimes/ && \
+	    hdfs dfs -put /dataset/movielens/movielens-test.mm /movielens/movielens-test/ && \
+	    hdfs dfs -put /dataset/movielens/movielens-train.mm /movielens/movielens-train/
