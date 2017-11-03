@@ -61,3 +61,7 @@ RUN /etc/bootstrap.sh && \
 	    hdfs dfs -put ${TBBROOT}/lib/intel64/gcc4.4/libtbb* /Hadoop/Libraries/ && \
 	    hdfs dfs -put ${HARP_DAAL_HOME}/external/omp/libiomp5.so /Hadoop/Libraries/
 
+RUN wget -q https://repo.continuum.io/archive/Anaconda2-5.0.1-Linux-x86_64.sh -O /conda.sh && \
+	    bash /conda.sh -b -p /opt/conda && \
+	    rm /conda.sh
+ENV PATH /opt/conda/bin:$PATH
