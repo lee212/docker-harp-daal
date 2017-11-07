@@ -65,6 +65,8 @@ RUN wget -q https://repo.continuum.io/archive/Anaconda2-5.0.1-Linux-x86_64.sh -O
 	    bash /conda.sh -b -p /opt/conda && \
 	    rm /conda.sh
 ENV PATH /opt/conda/bin:$PATH
+RUN conda install -y numpy=1.13.1 scipy=0.19.1 scikit-learn=0.19.0 matplotlib=2.0.2 pillow=3.2.0 && \
+			   pip --no-cache-dir install scikit-surprise 
 COPY movielens_nytimes.tar.gz /
 RUN tar xzf /movielens_nytimes.tar.gz -C / && \
 	    rm /movielens_nytimes.tar.gz && \
@@ -76,3 +78,8 @@ RUN tar xzf /movielens_nytimes.tar.gz -C / && \
 	    hdfs dfs -put /dataset/nytimes/nytimes.mrlda /nytimes/ && \
 	    hdfs dfs -put /dataset/movielens/movielens-test.mm /movielens/movielens-test/ && \
 	    hdfs dfs -put /dataset/movielens/movielens-train.mm /movielens/movielens-train/
+ENV DAALROOT /opt/intel/compilers_and_libraries_2016.4.258/linux/daal
+ENV HARP_DAAL_ROOT /harp/harp-daal-app
+ENV PYTHONPATH /harp/harp-daal-python
+ENV HARP_JAR $HADOOP_HOME/harp-app-1.0-SNAPSHOT.jar
+ENV HARP_DAAL_JAR $HADOOP_HOME/harp-daal-app-1.0-SNAPSHOT.jar
