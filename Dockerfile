@@ -78,8 +78,12 @@ RUN tar xzf /movielens_nytimes.tar.gz -C / && \
 	    hdfs dfs -put /dataset/nytimes/nytimes.mrlda /nytimes/ && \
 	    hdfs dfs -put /dataset/movielens/movielens-test.mm /movielens/movielens-test/ && \
 	    hdfs dfs -put /dataset/movielens/movielens-train.mm /movielens/movielens-train/
-ENV DAALROOT /opt/intel/compilers_and_libraries_2016.4.258/linux/daal
+#ENV DAALROOT /opt/intel/compilers_and_libraries_2016.4.258/linux/daal
+ENV DAALROOT /harp/harp-daal-app/__release__lnx/daal/
 ENV HARP_DAAL_ROOT /harp/harp-daal-app
 ENV PYTHONPATH /harp/harp-daal-python
 ENV HARP_JAR $HADOOP_HOME/harp-app-1.0-SNAPSHOT.jar
 ENV HARP_DAAL_JAR $HADOOP_HOME/harp-daal-app-1.0-SNAPSHOT.jar
+# Updating harp
+RUN cd harp && git pull && mvn clean package && \
+	    cp /harp/harp-app/target/harp-app-1.0-SNAPSHOT.jar $HADOOP_HOME
